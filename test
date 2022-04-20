@@ -1,1 +1,228 @@
-gfxmhgchgchchchgchfc
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+#include<malloc.h>
+
+typedef struct KhachHang
+{
+    char maKH[11];
+    char hoTen[31];
+    int csDau, csCuoi;
+    float tienDien;
+}KH;
+
+void nhapMang(int *&a, int &n);
+void xuatMang(int *a, int n);
+void xuatGiaTriVaDiaChiSoAm(int *a, int n);
+void swap(int &a, int &b);
+void sapXepDuongGiamAmDuNguyen(int *a, int n);
+void nhapMaTran(int b[][30], int &n);
+void xuatMaTran(int b[][30], int n);
+void sapXepTheoCot(int b[][30], int n, int &k);
+void timMinTamGiacTren(int b[][30], int n);
+
+int main()
+{
+    int *a, chon, n, b[30][30], k;
+    do
+    {
+        printf("1. Tao mang ngau nhien tu -k den k.\n");
+        printf("2. \n");
+
+        printf("Hay chon chuc nang: ");
+        scanf("%d", &chon);
+
+        switch (chon)
+        {
+        case 1:
+            {
+                nhapMang(a, n);
+                xuatMang(a, n);
+            }
+            break;
+        
+        case 2:
+            {
+                nhapMang(a, n);
+                xuatMang(a, n);
+                xuatGiaTriVaDiaChiSoAm(a, n);
+            }
+            break;
+
+        case 3:
+            {
+                nhapMang(a, n);
+                xuatMang(a, n);
+                sapXepDuongGiamAmDuNguyen(a, n);
+            }
+            break;
+
+        case 4:
+            {
+                nhapMaTran(b, n);
+                xuatMaTran(b, n);
+            }
+            break;
+
+        case 5:
+            {
+                nhapMaTran(b, n);
+                xuatMaTran(b, n);
+                sapXepTheoCot(b, n, k);
+                xuatMaTran(b, n);
+            }
+            break;
+
+        case 6: 
+            {
+                nhapMaTran(b, n);
+                xuatMaTran(b, n);
+                timMinTamGiacTren(b, n);
+            }
+            break;
+        
+        default:
+            printf("Khong co chuc nang nay!!\n");
+            break;
+        }
+    } while (chon == 0);
+    
+    getch();
+    return 0;
+}
+
+void nhapMang(int *&a, int &n)
+{
+    do
+    {
+        printf("Nhap so luong phan tu: ");
+        scanf("%d", &n);
+        a = (int*)malloc(n * sizeof(int));
+        if(n < 0)
+            printf("Vui long nhap lai!!");
+    } while (n < 0);
+    for(int i = 0; i < n; i++)
+    {
+        a[i]= rand() % (25 - (-25) +1) + (-25);
+    }
+}
+
+void xuatMang(int *a, int n)
+{
+    for(int i = 0; i < n;i++)
+    {
+        printf("%d  ", a[i]);
+    }
+}
+
+void xuatGiaTriVaDiaChiSoAm(int *a, int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        if(a[i] < 0)
+        {
+            printf("\nGia tri: %d, dia chi: %x\n", a[i], &a[i]);
+        }
+    }
+}
+
+void swap(int &a, int &b)
+{
+    int t = a;
+    a = b;
+    b = t;
+}
+
+void sapXepDuongGiamAmDuNguyen(int *a, int n)
+{
+    for(int i=0;i<n-1;i++)
+    {
+        for(int j=i;j<n;j++)
+        {
+            if(a[i] > 0)
+            {
+                if(a[i] < a[j])
+                {
+                    int t = a[i];
+                    a[i] = a[j];
+                    a[j] = t;
+                }
+            }
+            
+        }
+    }
+        
+}
+
+void nhapMaTran(int b[][30], int &n)
+{
+    do
+    {
+        printf("Nhap cap cua ma tran: ");
+        scanf("%d", &n);
+        if(n < 0)
+            printf("Vui long nhap lai!!");
+    } while (n < 0);
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            b[i][j] = rand() % (25 - (-25) +1) + (-25);
+        }
+    }
+}
+
+void xuatMaTran(int b[][30], int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            printf("%d\t", b[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void sapXepTheoCot(int b[][30], int n, int &k)
+{
+    printf("Nhap cot k de thay doi: ");
+    scanf("%d", &k);
+    for(int k = 0; k<n ; k++)
+    {
+        for(int i = 0; i<n-1 ; i++)
+        {
+            for(int j = n-1; j>i ; j--)
+            {
+                if(b[k][j]<b[k][j-1])
+                {
+                    int t = b[k][j];
+                    b[k][j] = b[k][j-1];
+                    b[k][j-1] = t;
+                }
+            }
+      
+        }
+      
+    }
+      
+}
+
+void timMinTamGiacTren(int b[][30], int n)
+{
+    int min = b[0][0];
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            if(i + j < n - 1)
+            {
+                if(min > b[i][j])
+                {
+                    min = b[i][j];
+                }
+            }
+        }
+    }
+    printf("Min cua tam giac tren : %d\n", min);
+}
