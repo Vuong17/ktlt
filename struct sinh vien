@@ -1,0 +1,176 @@
+#include<stdio.h>
+#include<conio.h>
+#include<stdlib.h>
+#define MAX 50
+
+struct SinhVien
+{
+    char maSv[21];
+    char hoTen[31];
+    float diemTieuLuan, diemKthuc, diemTong;
+};
+
+typedef SinhVien SV;
+
+void nhap1SV(SV &sv);
+void nhapDssv(SV dssv[MAX], int &n);
+void xuatDssv(SV dssv[], int n);
+void nhapFile(SV dssv[], int n);
+void xuatFile(SV dssv[], int &n);
+void findMaxCore(SV dssv[], int n);
+void findMinCore(SV dssv[], int n);
+
+int main()
+{
+    struct SinhVien dssv[MAX];
+    int n, key;
+    do
+    {
+        system("cls");
+        printf("\t- 1. Nhap/ xuat thong tin sinh vien vao file!!\n");
+        printf("\t- 2. In sinh vien co diem tong ket cao nhat va thap nhat.\n");
+        printf("\t- 3. Xuat danh sach tu file txt.\n");
+
+        printf("Hay chon chuc nang: ");
+        scanf("%d", &key);
+
+        switch (key)
+        {
+        case 1:
+            {
+                nhapDssv(dssv, n);
+                nhapFile(dssv, n);
+                xuatFile(dssv, n);
+                xuatDssv(dssv, n);
+            }
+            break;
+
+        case 2:
+            {
+                nhapDssv(dssv, n);
+                nhapFile(dssv, n);
+                xuatFile(dssv, n);
+                xuatDssv(dssv, n);
+                printf("Sinh vien co diem tong ket cao nhat la: \n");
+                findMaxCore(dssv, n);
+                printf("Sinh vien co diem tong ket thap nhat laf: \n");
+                findMinCore(dssv, n);
+            }
+            break;
+
+        case 3:
+            {
+                xuatFile(dssv, n);
+                xuatDssv(dssv, n);
+            }
+            break;
+
+        case 4:
+            {
+
+            }
+            break;
+        
+        default:
+            printf("Khong co chuc nang ban chon!!\n");
+            break;
+        }
+
+
+    } while (key == 0);
+    
+    getch();
+    return 0;
+}
+
+void nhap1SV(SV &sv)
+{
+    printf("\nNhap ma so sinh vien: "); fflush(stdin);
+    gets(sv.maSv);
+    printf("Nhap ho ten sinh vien: ");
+    gets(sv.hoTen);
+    printf("Nhap diem tieu luan: ");
+    scanf("%f", &sv.diemTieuLuan);
+    printf("Nhap diem ket thuc mon: ");
+    scanf("%f", &sv.diemKthuc);
+}
+
+void nhapDssv(SV dssv[MAX], int &n)
+{
+    printf("Nhap so luong sinh vien: ");
+    scanf("%d", &n);
+    for(int i = 0; i < n; i++)
+    {
+        printf("\nNhap thong tin sinh vien thu %d: \n", i + 1);
+        nhap1SV(dssv[i]);
+    }
+}
+
+void xuatDssv(SV dssv[], int n)
+{
+    printf("%-5s %-8s %-25s %-20s %-20s %-20s\n", "STT", "Ma Hs", "Ho ten","Diem tieu luan", "Diem ket thuc", "Diem tong ket");
+    for(int i = 0; i < n; i++)
+    {
+        dssv[i].diemTong = (float) dssv[i].diemTieuLuan * 0.3 + dssv[i].diemKthuc * 0.7;
+        printf("%-5d %-8s %-25s %-20.2f %-20.2f %-20.2f\n", i + 1, dssv[i].maSv, dssv[i].hoTen, dssv[i].diemTieuLuan, dssv[i].diemKthuc, dssv[i].diemTong);
+    }
+}
+
+void nhapFile(SV dssv[], int n)
+{
+    char a[1];
+    FILE *f;
+    f = fopen("bai2.txt", "wb");
+    if(f == NULL)
+    {
+        printf("Loi mo file!!\n");
+    }
+    fwrite(&n, sizeof(int), 1, f);
+    for(int i = 0; i < n; i++)
+    {
+        fwrite(&dssv[i], sizeof(SV), n, f);
+    }
+    fclose(f);
+}
+
+void xuatFile(SV dssv[], int &n)
+{
+    FILE *f;
+    f = fopen("bai2.txt", "rb");
+    if(f == NULL)
+    {
+        printf("Loi mo file!!");
+    }
+    fread(&n, sizeof(int), 1, f);
+    for(int i = 0; i < n; i++)
+    {
+        fread(&dssv[i], sizeof(SV), n, f);
+    }
+    fclose(f);
+}
+
+void findMaxCore(SV dssv[], int n)
+{
+    int max = dssv[0].diemTong;
+    for(int i = 0; i < n; i++)
+    {
+        if(max < dssv[i].diemTong)
+        {
+            max = dssv[i].diemTong;
+            printf("%-5d %-8s %-25s %-20.2f %-20.2f %-20.2f\n", i + 1, dssv[i].maSv, dssv[i].hoTen, dssv[i].diemTieuLuan, dssv[i].diemKthuc, dssv[i].diemTong);
+        }
+    }
+}
+
+void findMinCore(SV dssv[], int n)
+{
+    int min = dssv[0].diemTong;
+    for(int i = 0; i < n; i++)
+    {
+        if(min > dssv[i].diemTong)
+        {
+            min = dssv[i].diemTong;
+            printf("%-5d %-8s %-25s %-20.2f %-20.2f %-20.2f\n", i + 1, dssv[i].maSv, dssv[i].hoTen, dssv[i].diemTieuLuan, dssv[i].diemKthuc, dssv[i].diemTong);
+        }
+    }
+}
