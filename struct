@@ -1,0 +1,539 @@
+
+#include<stdio.h>
+#include<string.h>
+#include<conio.h>
+#include<math.h>
+#include<stdlib.h>
+
+struct HocSinh
+{
+	char ma_hs[15];
+	char ten_hs[30];
+	char diachi[30];
+	char gt[7];
+	float hk1, hk2, ca_nam;
+};
+
+struct Lop
+{
+	char ma_lop[15];
+	char ten_lop[30];
+	int siso;
+	char ten_GV[30];
+	HocSinh n_hs[60];
+};
+typedef Lop LP;
+
+void input(LP ds[], int& n);
+void nhap(LP& lp, FILE* L);
+void xuat(LP lp, int i);
+void xuat_n(LP ds[], int n);
+void add(LP ds[], int& n);
+void them(struct HocSinh &hs);
+void find_lop(LP ds[], int n);
+void find_max_score(LP ds[], int n);
+void max_siso(LP ds[], int n);
+void find_hs(LP ds[], int n);
+void gioi_lopx(LP ds[], int n);
+void xoa_space(char  x[]);
+void xoa(char  x[], int vt);
+void sapxep(LP ds[], int& n);
+void xoa_loptrong(LP ds[], int& n);
+void xoa_lop(LP ds[], int& n, int vt);
+void cap_nhat(LP& lp);
+void sua_lop(LP ds[], int& n);
+void diemCaNam(LP lp);
+void ThongKe(LP ds[], int n);
+
+
+int main()
+{
+	LP ds[100];
+	int n;
+	int chon;
+	do
+	{
+		system("cls");
+		printf("________________________ MENU ___________________________\n");
+		printf("  - 1. Xuat cac lop ra man hinh .\n");
+		printf("  - 2. Them 1 hoc sinh vao danh sach.\n");
+		printf("  - 3. Thong ke moi lop hoc co bao nhieu hoc sinh duoi 3.5.\n");
+		printf("  - 4. Tim thong tin lop hoc co ma x ra man hinh.\n");
+		printf("  - 5. In thong tin hoc sinh co diem ca nam max.\n");
+		printf("  - 6. Cho biet thong tin lop hoc co si so cao nhat.\n");
+		printf("  - 7. Tim hoc sinh co ma x_hs cua lop x.\n");
+		printf("  - 8. In danh sach cac hoc duoc xep loai gioi trong lop x.\n");
+		printf("  - 9. Sap xep lop tang dan theo ma lop.\n");
+		printf("  - 10. Cap nhat thong tin sau khi biet ma lop.\n");
+		printf("  - 11. Xoa cac lop khong co hoc sinh.\n");
+		printf("___________________________________________________________\n");
+
+		printf("Hay chon chuc nang: ");
+		scanf("%d", &chon);
+
+		switch (chon)
+		{
+		case 1:
+			{
+				input(ds, n);
+				xuat_n(ds, n);
+			}
+			break;
+
+		case 2:
+			{
+				input(ds, n);
+				add(ds, n);
+			}
+			break;
+
+		case 3:
+			{
+				input(ds, n);
+				ThongKe(ds, n);
+			}
+			break;
+
+		case 4:
+			{
+				input(ds, n);
+				find_lop(ds, n);
+			}
+			break;
+
+		case 5:
+			{
+				input(ds, n);
+				find_max_score(ds, n);
+			}
+			break;
+
+		case 6:
+			{
+				input(ds, n);
+				printf("Lop co si so lon nhat la: \n");
+				max_siso(ds, n);
+			}
+			break;
+
+		case 7:
+			{
+				input(ds, n);
+				find_hs(ds, n);
+			}
+			break;
+
+		case 8:
+			{
+				input(ds, n);
+				gioi_lopx(ds, n);
+			}
+			break;
+
+		case 9:
+			{
+				input(ds, n);
+				sapxep(ds, n);
+				xuat_n(ds, n);
+			}
+			break;
+
+		case 10:
+			{
+				input(ds, n);
+				sua_lop(ds, n);
+			}
+			break;
+
+		case 11:
+			{
+				input(ds, n);
+				xoa_loptrong(ds, n);
+				printf("Xoa lop thanh cong!\n");
+			}
+			break;
+		
+		default:
+			{
+				printf("\nKhong co chuc nang ban chon!!\n");
+			}
+			break;
+		}
+
+		char c;
+        printf("Ban co muon tiep tuc truong trinh khong? (Nhap y/n): "); fflush(stdin);
+		scanf("%c", &c);
+		if(c == 'y')
+        {
+			chon = 0;
+		}
+        else
+        {
+			printf("Tam biet!\n");
+	    }
+
+	} while (chon == 0);
+	return 0;
+}
+
+void input(LP ds[], int& n)
+{
+	FILE* L;
+	L = fopen("Struct.txt", "rt");
+	fscanf(L, "%d", &n);
+	
+	for (int i = 0; i < n; i++)
+	{
+		int dem = 0;
+		nhap(ds[i], L);
+	}
+	fclose(L);
+}
+
+void xuat_n(LP ds[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		int dem = 0;
+		printf("\n%-10s %-5s %-15s %-15s %-25s\n","Ma Lop","STT","Ten Lop","Si So","Ten GV");
+		xuat(ds[i], i);
+		
+	}
+}
+
+void xuat(LP lp,int i)
+{
+	printf("%-10s %-5d %-15s %-15d %-25s\n", lp.ma_lop, i + 1, lp.ten_lop, lp.siso, lp.ten_GV);
+	printf("\n----------------------------------------------------------------------------------------------\n");
+	if (lp.siso != 0)
+	{
+		printf("%-5s %-8s %-25s %-25s %-15s %-10s %-10s %-10s\n", "STT", "Ma Hs", "Ten", "Dia chi", "Gioi Tinh", "HK1", "HK2", "Ca Nam");
+		for (int i = 0; i < lp.siso; i++)
+		{
+
+			printf("%-5d %-8s %-25s %-25s %-15s %-10.2f %-10.2f %-10.2f\n", i + 1, lp.n_hs[i].ma_hs, lp.n_hs[i].ten_hs, lp.n_hs[i].diachi, lp.n_hs[i].gt, lp.n_hs[i].hk1, lp.n_hs[i].hk2, lp.n_hs[i].ca_nam);
+		}
+		
+		printf("\n----------------------------------------------------------------------------------------------\n");
+	}
+}
+
+void diemCaNam(LP lp)
+{
+	int dem = 0;
+	for (int i = 0; i < lp.siso; i++)
+	{
+		if(lp.n_hs[i].ca_nam < 3.5 )
+		{
+			// printf("%-5s %-10s %-15s %-15s %-25s\n","STT","ma lop","Ten Lop","Si So","Ten GV");
+			// xuat(lp, i);
+			dem++;
+		}
+	}
+	printf("%s co %d hs duoi 3.5\n", lp.ma_lop, dem);
+}
+
+void ThongKe(LP ds[], int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		diemCaNam(ds[i]);
+	}
+}
+
+void add(LP ds[], int &n)
+{
+	char name[30];
+	printf("Nhap ma lop can them: "); fflush(stdin);
+	gets(name);
+	for (int i = 0; i < n; i++)
+	{
+			xoa_space(ds[i].ma_lop);
+		if (_strcmpi(ds[i].ma_lop, name) == 0)
+		{
+			int index = ds[i].siso;
+			them(ds[i].n_hs[index]);
+			ds[i].siso++;
+			printf("%-5s %-8s %-25s %-25s %-15s %-10s %-10s %-10s\n", "STT", "Ma Hs", "Ten", "Dia chi", "Gioi Tinh", "HK1", "HK2", "Ca Nam");
+			xuat(ds[i], i);
+		}
+	}
+}
+
+void find_lop(LP ds[], int n)
+{
+	int dem = 0;
+	char x[10];
+	printf("Nhap ma lop can tim: "); fflush(stdin);
+	gets(x);
+	printf("\n%-10s %-5s %-15s %-15s %-25s\n","Ma Lop","STT","Ten Lop","Si So","Ten GV");
+	for (int i = 0; i < n; i++)
+	{
+		xoa_space(ds[i].ma_lop);
+		if (_strcmpi(ds[i].ma_lop, x) == 0 )
+		{
+			dem++;
+			xuat(ds[i], i);
+		}
+	}
+	if (dem == 0)printf("lop hoc %s ko ton tai trong ds\n", x);
+}
+
+void find_max_score(LP ds[], int n)
+{
+	float max=-1;
+	int dem = 0;
+	char x[10];
+	printf("Nhap ma lop can tim: "); fflush(stdin);
+	gets(x);
+	printf("\n%-10s %-5s %-15s %-15s %-25s\n","Ma Lop","STT","Ten Lop","Si So","Ten GV");
+	for (int i = 0; i < n; i++)
+	{
+		xoa_space(ds[i].ma_lop);
+		for (int j = 0; j < ds[i].siso; j++)
+		{
+			if (_strcmpi(ds[i].ma_lop, x) == 0 && ds[i].n_hs[j].ca_nam>=max)
+			{
+				max = ds[i].n_hs[j].ca_nam;
+				dem++;
+			}
+		}
+	}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < ds[i].siso; j++)
+		{
+			if (_strcmpi(ds[i].ma_lop, x) == 0 && ds[i].n_hs[j].ca_nam == max)
+			{
+				printf("%-10s %-5d %-15s %-15d %-25s\n", ds[i].ma_lop, i + 1, ds[i].ten_lop, ds[i].siso, ds[i].ten_GV);
+				printf("\n%-5s %-8s %-25s %-25s %-15s %-10s %-10s %-10s\n", "STT", "Ma Hs", "Ten", "Dia chi", "Gioi Tinh", "HK1", "HK2", "Ca Nam");
+				printf("%-5d %-8s %-25s %-25s %-15s %-10.2f %-10.2f %-10.2f\n", i + 1, ds[i].n_hs[j].ma_hs, ds[i].n_hs[j].ten_hs, ds[i].n_hs[j].diachi, ds[i].n_hs[j].gt, ds[i].n_hs[j].hk1, ds[i].n_hs[j].hk2, ds[i].n_hs[j].ca_nam);
+
+			}
+		}
+	}
+	if (dem == 0)printf("lop hoc %s ko ton tai trong ds\n", x);
+}
+
+void find_hs(LP ds[], int n)
+{
+	float max = -1;
+	int dem = 0;
+	char hs[10],x[10];
+	printf("Nhap ma lop can tim: "); fflush(stdin);
+	gets(x);
+	printf("Nhap ma hs can tim: "); fflush(stdin);
+	gets(hs);
+	printf("\n%-10s %-5s %-15s %-15s %-25s\n","Ma Lop","STT","Ten Lop","Si So","Ten GV");
+
+	for (int i = 0; i < n; i++)
+	{
+		xoa_space(ds[i].ma_lop);
+		for (int j = 0; j < ds[i].siso; j++)
+		{
+			if (_strcmpi(ds[i].ma_lop, x) == 0 && _strcmpi(ds[i].n_hs[j].ma_hs, hs) == 0)
+			{
+				printf("%-10s %-5d %-15s %-15d %-25s\n", ds[i].ma_lop, i + 1, ds[i].ten_lop, ds[i].siso, ds[i].ten_GV);
+				dem++;
+				printf("\n%-5s %-8s %-25s %-25s %-15s %-10s %-10s %-10s\n", "STT", "Ma Hs", "Ten", "Dia chi", "Gioi Tinh", "HK1", "HK2", "Ca Nam");
+				printf("%-5d %-8s %-25s %-25s %-15s %-10.2f %-10.2f %-10.2f\n", i + 1, ds[i].n_hs[j].ma_hs, ds[i].n_hs[j].ten_hs, ds[i].n_hs[j].diachi, ds[i].n_hs[j].gt, ds[i].n_hs[j].hk1, ds[i].n_hs[j].hk2, ds[i].n_hs[j].ca_nam);
+
+			}
+		}
+	}
+	if (dem == 0)printf("Khong co ma hs trong lop %s\n", x);
+}
+
+void sapxep(LP ds[], int& n)
+{
+	for (int i = 0; i < n-1; i++)
+	{
+		
+		for (int j = i+1; j < n; j++)
+		{
+			xoa_space(ds[i].ma_lop);
+			xoa_space(ds[j].ma_lop);
+			if (_strcmpi(ds[i].ma_lop, ds[j].ma_lop) > 0)
+			{
+				LP temp;
+				temp = ds[i];
+				ds[i] = ds[j];
+				ds[j] = temp;
+			}
+		}
+		
+	}
+}
+
+void xoa_loptrong(LP ds[], int& n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		if (ds[i].siso == 0)
+		{
+
+			xoa_lop(ds, n, i);
+			i--;
+		}
+	}
+}
+
+void xoa_lop(LP ds[], int &n,int vt)
+{
+	for (int i = vt+1; i < n; i++)
+	{
+		ds[i - 1] = ds[i];
+	}
+	n--;
+}
+
+void gioi_lopx(LP ds[], int n)
+{
+	int dem = 0;
+	char  x[10];
+	printf("Nhap ma lop can tim: "); fflush(stdin);
+	gets(x);
+	printf("\n%-8s %-25s %-25s %-15s %-10s %-10s %-10s\n", "Ma Hs", "Ten", "Dia chi", "Gioi Tinh", "HK1", "HK2", "Ca Nam");
+
+	for (int i = 0; i < n; i++)
+	{
+		xoa_space(ds[i].ma_lop);
+		for (int j = 0; j < ds[i].siso; j++)
+		{
+			
+			if (_strcmpi(ds[i].ma_lop, x) == 0 && ds[i].n_hs[j].ca_nam>=8&& ds[i].n_hs[j].hk1 >= 7&& ds[i].n_hs[j].hk2 >= 7)
+			{
+				dem++;
+				printf("%-8s %-25s %-25s %-15s %-10.2f %-10.2f %-10.2f\n", ds[i].n_hs[j].ma_hs, ds[i].n_hs[j].ten_hs, ds[i].n_hs[j].diachi, ds[i].n_hs[j].gt, ds[i].n_hs[j].hk1, ds[i].n_hs[j].hk2, ds[i].n_hs[j].ca_nam);
+
+			}
+		}
+	}
+	if (dem == 0)printf("Khong co hsg trong lop %s\n",x );
+}
+
+void xoa_space(char  x[])
+{
+	for (int i = 0; i < strlen(x); i++)
+	{
+		if (x[i] == '\n')
+		{
+			xoa(x, i);
+		}
+	}
+
+}
+
+void xoa(char  x[], int vt)
+{
+	for (int i = vt + 1; i < strlen(x); i++)
+	{
+		x[i - 1] = x[i];
+	}
+	x[strlen(x) - 1] = '\0';
+}
+
+void max_siso(LP ds[], int n)
+{
+	int max=-1 ;
+	char x[10];
+
+	printf("\n%-10s %-5s %-15s %-15s %-25s\n","Ma Lop","STT","Ten Lop","Si So","Ten GV");
+	for (int i = 0; i < n; i++)
+	{
+			if (ds[i].siso >= max)
+			{
+				max = ds[i].siso;
+
+			}
+	}
+	for (int i = 0; i < n; i++)
+	{
+		if (ds[i].siso == max)
+		{
+			xuat(ds[i], n);
+		}
+	}
+}
+
+void sua_lop(LP ds[], int &n)
+{
+	int dem = 0;
+	char  x[10];
+	printf("Nhap ma lop can tim: "); fflush(stdin);
+	gets(x);
+	for (int i = 0; i < n; i++)
+	{
+		xoa_space(ds[i].ma_lop);
+		if (_strcmpi(ds[i].ma_lop, x) == 0)
+		{
+			dem++;
+			cap_nhat(ds[i]);
+		}
+	}
+	if (dem == 0)printf("Khong co ma lop %s trong danh sach \n", x);
+	else
+	{
+		xuat_n(ds, n);
+	}
+}
+
+void cap_nhat(LP& lp)
+{
+	printf("Nhap ma lop: ");
+	gets(lp.ma_lop);
+	printf("Nhap ten lop: ");
+	gets(lp.ten_lop);
+	printf("Nhap ten GV: ");
+	gets(lp.ten_GV);
+}
+
+void them(struct HocSinh &hs)
+{
+	printf("Nhap ma: ");
+	gets(hs.ma_hs);
+	printf("Nhap ten: ");
+	gets(hs.ten_hs);
+	printf("Nhap dia chi: ");
+	gets(hs.diachi);
+	printf("Nhap gioi tinh: ");
+	gets(hs.gt);
+	printf("Nhap diem HK1: ");
+	scanf("%f", &hs.hk1);
+	printf("Nhap diem HK2: ");
+	scanf("%f", &hs.hk2);
+	hs.ca_nam = (hs.hk1 + (hs.hk2 * 2)) / 3;
+}
+
+void nhap(LP& lp,FILE*L)
+{
+	char c,d;
+	fscanf(L, "%[^#]s", lp.ma_lop);
+	fscanf(L, "%c",&c);
+	fscanf(L, "%[^#]s", lp.ten_lop);
+	fscanf(L, "%c", &c);
+	fscanf(L, "%[^#]s", lp.ten_GV);
+	fscanf(L, "%c", &c);
+	int i = 0;
+	while (i < 60)
+	{
+		fscanf(L, "%c", &d);
+		if (d=='/')
+			break;
+		fscanf(L, "%[^#]s", lp.n_hs[i].ma_hs);
+		fscanf(L, "%c", &d);
+		fscanf(L, "%[^#]s", lp.n_hs[i].ten_hs);
+		fscanf(L, "%c", &d);
+		fscanf(L, "%[^#]s", lp.n_hs[i].diachi);
+		fscanf(L, "%c", &d);
+		fscanf(L, "%[^#]s", lp.n_hs[i].gt);
+		fscanf(L, "%c", &d);
+		fscanf(L, "%f", &lp.n_hs[i].hk1);
+		fscanf(L, "%c", &d);
+		fscanf(L, "%f", &lp.n_hs[i].hk2);
+		lp.n_hs[i].ca_nam = (lp.n_hs[i].hk1 + (lp.n_hs[i].hk2 * 2)) / 3;
+		i++;
+		
+	}
+	lp.siso = i;
+}
