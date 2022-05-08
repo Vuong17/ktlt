@@ -1,0 +1,210 @@
+Câu 1 
+A)
+bool KTMangTang(int* a, int n)
+{
+    int* dem = 0;
+    for (int i = 0; i < n – 1; i++)
+    {
+        if (*a[i + 1]) > = *a[i]))
+        * dem++;
+    }
+    if (*dem == n – 1)
+        return true;
+    return false;
+}
+B)
+void swap(int& a, int& b)
+{
+	int t = a;
+	a = b;
+	b = t;
+}
+Int partition(int arr[], int low, int high)
+{
+	Int pivot = arr[high];
+	Int left = low;
+	Int right = high - 1;
+	While
+	{
+		While(left <= right && arr[left] < pivot) left++;
+		While(right >= left && arr[right] > pivot) right--;
+		If(left >= right) break;
+		Swap(arr[left], arr[right];
+		Left++;
+		Right--;
+	}
+	swap(arr[left], arr[high]);
+	return left;
+}
+void quickSort(int arr[], int low, int high)
+{
+	if (low < high)
+	{
+		int pi = partition(arr, low, high);
+		quickSort(arr, low, pi - 1);
+		quickSort(arr, pi + 1, high);
+	}
+}
+int main() {
+	int* a, n, i;
+	printf("Nhap so luong mang: ");
+	scanf("%d", &n);
+	a = (int*)malloc(n * sizeof(int));
+	for (i = 0;i < n;i++) {
+		printf("Nhap a[%d]: ", i);
+		scanf("%d", &a[i]);
+	}
+	if (CheckMangCoToanTang(a, n) == 1) printf("Cau a: Mang a la la mang toan tang\n");
+	else printf("Cau a: Mang a khong phai la mang toan tang\n");
+	quickSort(a, 0, n - 1);
+	printf("Cau b: Mang a sau khi sap xep theo thuat toan Quick Sort la: ");
+	for (i = 0;i < n;i++) {
+		printf("%d ", a[i]);
+	}
+	Return 0;
+}
+Câu 2
+A)
+int TimX(int a[], int x) {
+	for (int i = 0; i < 7; i++)
+		if (a[i] == x)
+			return i;
+	return -1;
+}
+int main() {
+	int a[] = { 5, 2, 9, 1, 6, 8 , 7 };
+	int x;
+	printf("Nhap vao phan tu muon tim: ");
+	scanf("%d", &x);
+	if (TimX == -1)
+		printf("\nKhong tim thay phan tu trong mang!")
+	else
+		printf("Vi tri: %d ", TimX(a, x));
+}
+Minh Họa
+Tìm giá trị x = 3 
+Bước 1: Duyệt phần tử 5 khác với phần tử tử 3 nên tiếp tục 
+Bước 2: Duyệt phần tử 2 khác với phần tử tử 3 nên tiếp tục 
+Bước 3: Duyệt phần tử 9 khác với phần tử tử 3 nên tiếp tục 
+Bước 4: Duyệt phần tử 1 khác với phần tử tử 3 nên tiếp tục 
+Bước 5: Duyệt phần tử 6 khác với phần tử tử 3 nên tiếp tục
+Bước 6: Duyệt phần tử 8 khác với phần tử tử 3 nên tiếp tục 
+Bước 7: Duyệt phần tử 7 khác với phần tử tử 3 nên tiếp tục 
+Bước 8: Trả về giá trị -1 chứng tỏ không tìm được phần tử 3 trong mảng a và kết thúc hàm tìm kiếm tuyến tính. 
+Tìm giá trị x = 8 
+Bước 1: Duyệt phần tử 5 khác với phần tử tử 8 nên tiếp tục 
+Bước 2: Duyệt phần tử 2 khác với phần tử tử 8 nên tiếp tục 
+Bước 3: Duyệt phần tử 9 khác với phần tử tử 8 nên tiếp tục 
+Bước 4: Duyệt phần tử 1 khác với phần tử tử 8 nên tiếp tục
+Bước 5: Duyệt phần tử 6 khác với phần tử tử 8 nên tiếp tục 
+Bước 6: Duyệt phần tử 8 giống với phần tử tử 8 nên trả về vị trí của giá trị 8 là 5 và kết thúc hàm tìm kiếm tuyến tính.
+B)
+ int tong(int a[][MAX], int i, int n) {
+	int s = 0;
+	for (int j = 0;j < n;j++)
+		s = s + a[i][j];
+	return s;
+}
+int DongCoTongLonNhat(int a[][MAX], int m, int n) {
+	if (n < 0 || m < 0) {
+		return -1;
+	}
+	else {
+		int i, d;
+		double max = tong(a, 0, n);
+		for (i = 1;i < m;i++) {
+			int t = tong(a, i, n);
+			if (max < t) {
+				max = t;
+				d = i;
+			}
+		}
+		return d;
+	}
+}
+
+Câu 3
+A)
+struct GiaoVien {
+	char MaGiaoVien[15], HoTen[30];
+	int namsinh;
+};
+struct DeTai {
+	char MaDeTai[15], TenDeTai[30];
+	GiaoVien gv;
+	int SoSinhVienToiDa, NamThucHien;
+};
+B)
+
+void InDanhSachGiaoVienLeHoangHai(DeTai dsDT[], int n)
+{
+	int i, dem = 1;
+	for (i = 0;i < n;i++) {
+		if (strcmp(dsDT[i].gv.HoTen, "Le Hoang Hai") == 0) {
+			printf("\tThong tin de tai do Le Hoang Hai huong dan thu %d\n", dem++);
+			printf("Ma de tai: %s\n", dsDT[i].MaDeTai);
+			printf("Ten de tai: %s\n", dsDT[i].TenDeTai);
+			printf("Ma giao vien: %s\n", dsDT[i].gv.MaGiaoVien);
+			printf("Ho ten gv: %s\n", dsDT[i].gv.HoTen);
+			printf("Nam sinh: %d\n", dsDT[i].gv.namsinh);
+			printf("So sinh vien toi da: %d\n", dsDT[i].SoSinhVienToiDa);
+			printf("Nam thuc hien: %d\n", dsDT[i].NamThucHien);
+		}
+	}
+}
+C)
+SapXepGiamDanTheoNamThucHienBangThuatToanQuickSort(DeTai dsDT[], int left, int right) {
+	int i, j;
+	DeTai x;
+	if (left >= right) {
+		return;
+	}
+	x = dsDT[(left + right) / 2];
+	i = left;
+	j = right;
+	while (i < j) {
+		while (dsDT[i].NamThucHien > x.NamThucHien) {
+			i++;
+		}
+		while (dsDT[j].NamThucHien < x.NamThucHien) {
+			j--;
+		}
+		if (i <= j) {
+			DeTai tam = dsDT[i];
+			dsDT[i] = dsDT[j];
+			dsDT[j] = tam;
+			i++;
+			j--;
+		}
+	}
+	SapXepGiamDanBangThuatToanQuickSort(dsDT, left, j);
+	SapXepGiamDanBangThuatToanQuickSort(dsDT, i, right);
+}
+int main() {
+	int n;
+	printf("Nhap so luong de tai: ");
+	scanf("%d", &n);
+	DeTai dsDT[n];
+	return 0;
+}
+Câu 4
+A)
+float cau4a(int n) {
+	if (n < 1) return 0;
+	else {
+		return pow(-1, n - 1) * (sqrt(n + 1) / (n * (n + 1))) + cau4a(n - 1);
+	}
+}
+B)
+int demLe(int a[], int i)
+{
+	if (i == -1)
+		return 0;
+	else
+	{
+		if (a[i] % 2 != 0)
+			return 1 + demLe(a, i - 1);
+		else
+			return demLe(a, i - 1);
+	}
+}
